@@ -3,17 +3,15 @@ pragma solidity ^0.8.0;
 
 import "./interfaces/ISBT721.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/IERC721EnumerableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/IERC721MetadataUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/structs/EnumerableMapUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
-// Trava Accout Token 
-contract TAT is ISBT721, Initializable, AccessControlUpgradeable{
+// Trava Accout Token
+contract TAT is ISBT721, AccessControlUpgradeable, OwnableUpgradeable {
     using StringsUpgradeable for uint256;
     using CountersUpgradeable for CountersUpgradeable.Counter;
     using EnumerableMapUpgradeable for EnumerableMapUpgradeable.AddressToUintMap;
@@ -27,10 +25,9 @@ contract TAT is ISBT721, Initializable, AccessControlUpgradeable{
     CountersUpgradeable.Counter private _tokenId;
 
     // Token name
-    string public name_;
-
+    string public name;
     // Token symbol
-    string public symbol_;
+    string public symbol;
 
     // Token URI
     string private _baseTokenURI;
@@ -38,16 +35,17 @@ contract TAT is ISBT721, Initializable, AccessControlUpgradeable{
     // Operator
     bytes32 public constant OPERATOR_ROLE = keccak256("OPERATOR_ROLE");
 
-    /**
-     * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
-     */
+
     function initialize(
         string memory name_,
         string memory symbol_,
         address admin_
-    ) public reinitializer(1) {
-        name_ = name_;
-        symbol_ = symbol_;
+    ) external initializer {
+        __AccessControl_init();
+        __Ownable_init();
+
+        name= name_;
+        symbol = symbol_;
 
         // grant DEFAULT_ADMIN_ROLE to contract creator
         _grantRole(DEFAULT_ADMIN_ROLE, admin_);
@@ -173,20 +171,20 @@ contract TAT is ISBT721, Initializable, AccessControlUpgradeable{
         _baseTokenURI = uri;
     }
 
-    function balanceOf(address owner) external override view returns (uint256) {
+    function balanceOf(address owner) external view override returns (uint256) {
         (bool success, ) = _tokenMap.tryGet(owner);
         return success ? 1 : 0;
     }
 
-    function tokenIdOf(address from) external override view returns (uint256) {
+    function tokenIdOf(address from) external view override returns (uint256) {
         return _tokenMap.get(from, "The wallet has not attested any SBT");
     }
 
-    function ownerOf(uint256 tokenId) external override view returns (address) {
+    function ownerOf(uint256 tokenId) external view override returns (address) {
         return _ownerMap.get(tokenId, "Invalid tokenId");
     }
 
-    function totalSupply() external override view returns (uint256) {
+    function totalSupply() external view override returns (uint256) {
         return _tokenMap.length();
     }
 

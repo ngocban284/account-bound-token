@@ -12,7 +12,7 @@ async function main() {
   ]);
 
   await tat.deployed();
-  console.log("BAB deployed to:", tat.address);
+  console.log("Trava Account Token deployed to:", tat.address);
 }
 
 main();
