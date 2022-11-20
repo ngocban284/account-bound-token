@@ -2,11 +2,10 @@ node_modules
 .env
 coverage
 coverage.json
+hardhat.config.js
 typechain
 typechain-types
 
 #Hardhat files
 cache
 artifacts
-
-hardhat.config.js
