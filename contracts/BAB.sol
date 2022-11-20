@@ -12,7 +12,8 @@ import "@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/structs/EnumerableMapUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 
-contract SBT is ISBT721, Initializable, AccessControlUpgradeable{
+// Trava Accout Token 
+contract TAT is ISBT721, Initializable, AccessControlUpgradeable{
     using StringsUpgradeable for uint256;
     using CountersUpgradeable for CountersUpgradeable.Counter;
     using EnumerableMapUpgradeable for EnumerableMapUpgradeable.AddressToUintMap;
