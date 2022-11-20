@@ -2,7 +2,6 @@ node_modules
 .env
 coverage
 coverage.json
-hardhat.config.js
 typechain
 typechain-types
 
